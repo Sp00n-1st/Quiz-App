@@ -102,7 +102,11 @@ class Quiz extends StatelessWidget {
                                         listAnswerUser:
                                             userResult!.listAnswerUser,
                                         totalQuestion:
-                                            quizModel.results!.length),
+                                            quizModel.results!.length,
+                                        name: name,
+                                        category: category,
+                                        difficulty: difficulty,
+                                        quizModel: quizModel),
                                     transition: Transition.leftToRightWithFade);
                               },
                             ),

@@ -28,7 +28,7 @@ class CheckAnswer extends StatelessWidget {
             ),
             Icon(
               isCorrect ? CupertinoIcons.check_mark : CupertinoIcons.xmark,
-              color: isCorrect ? Colors.blue : Colors.red,
+              color: isCorrect ? Colors.green : Colors.red,
             )
           ],
         ));

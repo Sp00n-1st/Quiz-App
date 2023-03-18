@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../controller/controller.dart';
+import '../model/quiz_model.dart';
 import '../view_model/check_answer.dart';
 import 'home.dart';
 
@@ -13,11 +14,18 @@ class Result extends StatelessWidget {
   List<String?> correctAnswer;
   List<String?> listAnswerUser;
   int totalQuestion;
+  String difficulty, name;
+  int category;
+  QuizModel quizModel;
   Result(
       {super.key,
       required this.correctAnswer,
       required this.listAnswerUser,
-      required this.totalQuestion});
+      required this.totalQuestion,
+      required this.name,
+      required this.category,
+      required this.difficulty,
+      required this.quizModel});
   @override
   Widget build(BuildContext context) {
     String? image;
@@ -63,6 +71,51 @@ class Result extends StatelessWidget {
     return Scaffold(
         backgroundColor: const Color(0xff566af4),
         appBar: AppBar(
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return CupertinoAlertDialog(
+                          title: Text(
+                            'Are You Sure To Replay Quiz ?',
+                            style: GoogleFonts.poppins(fontSize: 16),
+                          ),
+                          content: const Icon(
+                            Icons.replay,
+                            size: 50,
+                          ),
+                          actions: [
+                            MaterialButton(
+                              onPressed: () async {
+                                await controller.replayQuiz(
+                                    category, difficulty, quizModel, name);
+                              },
+                              child: Text(
+                                'Yes',
+                                style: GoogleFonts.poppins(fontSize: 14),
+                              ),
+                            ),
+                            MaterialButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                'No',
+                                style: GoogleFonts.poppins(fontSize: 14),
+                              ),
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  icon: const Icon(Icons.replay)),
+              const SizedBox(
+                width: 20,
+              )
+            ],
             centerTitle: true,
             title: Text(
               'Result',
@@ -140,7 +193,7 @@ class Result extends StatelessWidget {
                     );
                   },
                 ),
-              )
+              ),
             ],
           ),
         ));

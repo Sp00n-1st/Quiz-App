@@ -41,7 +41,11 @@ class Controller extends GetxController {
             Result(
                 correctAnswer: userResult.correctAnswer,
                 listAnswerUser: userResult.listAnswerUser,
-                totalQuestion: quizModelSingle.results!.length),
+                totalQuestion: quizModelSingle.results!.length,
+                name: name,
+                category: category,
+                difficulty: difficulty,
+                quizModel: quizModelSingle),
             transition: Transition.leftToRightWithFade);
       }
     }
@@ -149,5 +153,25 @@ class Controller extends GetxController {
         .replaceAll('&idquo;', '"')
         .replaceAll('&rdquo;', '"');
     return filter;
+  }
+
+  Future<void> replayQuiz(
+      int category, String difficulty, QuizModel quizModel, String name) async {
+    var openResult = await Hive.openBox('result$category$difficulty');
+    openResult = Hive.box('result$category$difficulty');
+    UserResult userResult = openResult.getAt(0);
+    for (int i = 0; i < userResult.listAnswerUser.length; i++) {
+      userResult.listAnswerUser[i] = null;
+    }
+    userResult.isDone = false;
+    await openResult.clear();
+    await openResult.add(userResult);
+    Get.offAll(Quiz(
+      difficulty: difficulty,
+      quizModel: quizModel,
+      category: category,
+      name: name,
+      userResult: userResult,
+    ));
   }
 }
